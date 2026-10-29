@@ -1,2 +1,37 @@
-# RC-UI-Style-Skill
-Reusable UI style skill: frosted surfaces, hierarchical rounded rectangles, restrained motion and interaction states.
+# RC UI Style Skill
+
+RedialC 的个人 UI 风格技能包：轻磨砂、分级圆角矩形、细描边、紧凑对齐、克制的交互反馈。
+
+这是可复制到不同 Agent 工作流的 **文件型 skill**，不是某个前端框架，也不是自动安装脚本。2026-10-29，用户确认下图的整体方向；具体 token 是提炼后的起点，不代表六个参考项目都使用相同数值。
+
+![已确认的风格方向](skills/rc-ui-style/assets/style-confirmation.png)
+
+图中仍保留生成时的“待你确认”字样，但整体方向已于 **2026-10-29** 获用户确认。图中深色预览的缩略图仅是示意，不意味着可以随主题压暗实际媒体。实现以本包正文规则为准，正文优先于生成图中的视觉伪影；无需为这两个差异重绘确认图。
+
+## 使用
+
+完整复制 `skills/rc-ui-style/`，保留内部相对路径，放到目标 Agent 支持的技能目录。支持项目级 Codex skills 的环境可放入项目的 `.agents/skills/rc-ui-style/`；其他客户端按各自说明选择目录。复制文件不代表目标客户端已经加载成功，请在目标环境确认。
+
+可直接对支持显式 skill 调用的 Agent 说：
+
+> 使用 $rc-ui-style 改善当前界面，保留业务功能和既有主题。先说明采用的组件与动效规则，再实现并验收。
+
+不支持自动发现 skills 的 Agent，可让它先阅读 `skills/rc-ui-style/SKILL.md`。本仓库本身不向个人技能目录安装任何东西。
+
+## 内容
+
+- `SKILL.md`：工作入口、风格原则与引用路由。
+- `references/visual-system.md`：配色、材质、圆角、密度与排版。
+- `references/components.md`：按钮、导航、输入、卡片、状态与布局细节。
+- `references/motion.md`：动效层级、轻弹性、状态与性能约束。
+- `references/acceptance.md`：视觉、交互、响应式及可访问性验收，含独立子线程分模块评分、证据覆盖率、阻断规则和复验模板。
+- `references/source-map.md`：六个参考项目的固定版本证据及例外。
+- `assets/rc-ui.css`：可选、局部作用域的 CSS 起始模板。
+- `assets/components.html`：无需依赖的组件状态示例，直接用浏览器打开。
+- `assets/style-confirmation.png`：整体风格确认图；不用于逐像素或字号测量。
+
+## 边界
+
+不把所有控件改成胶囊，不锁死蓝色，不让玻璃压过可读性，不把教学示例当产品规范。小型悬浮工具、大型仪表盘和媒体图库保留各自密度与圆角差异。减少动效与低性能回退是实现的一部分。
+
+本包不包含第三方项目源码复制、字体或图标依赖；来源链接用于追溯。未指定开源许可证，不据此授予其他参考项目的许可。

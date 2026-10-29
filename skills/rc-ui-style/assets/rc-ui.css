@@ -1,0 +1,101 @@
+/* Opt-in starting point. Map tokens to the target project; no global resets. */
+.rc-ui {
+  box-sizing: border-box;
+  --rc-bg: #f0f1f4;
+  --rc-panel: rgba(255,255,255,.82);
+  --rc-solid: #fafbfc;
+  --rc-line: rgba(110,126,148,.24);
+  --rc-text: #1d1d1f;
+  --rc-muted: #586779;
+  --rc-accent: #1765ca;
+  --rc-accent-soft: rgba(23,101,202,.1);
+  --rc-on-accent: #fff;
+  --rc-radius-control: 10px;
+  --rc-radius-card: 14px;
+  --rc-radius-panel: 22px;
+  --rc-gap: 12px;
+  --rc-blur: 12px;
+  --rc-fast: 160ms;
+  --rc-medium: 260ms;
+  --rc-ease-out: cubic-bezier(.22,1,.36,1);
+  --rc-shadow: 0 8px 24px rgba(22,34,55,.08);
+  color: var(--rc-text);
+  background: var(--rc-bg);
+  font: 14px/1.5 "Segoe UI", "PingFang SC", "Microsoft YaHei UI", sans-serif;
+  color-scheme: light;
+}
+.rc-ui[data-theme="dark"] {
+  --rc-bg: #0b1018;
+  --rc-panel: rgba(17,25,38,.92);
+  --rc-solid: #111926;
+  --rc-line: #344358;
+  --rc-text: #f8fafc;
+  --rc-muted: #a6b4c7;
+  --rc-accent: #77d2ff;
+  --rc-accent-soft: rgba(119,210,255,.12);
+  --rc-on-accent: #0b1018;
+  --rc-shadow: 0 12px 30px rgba(0,0,0,.2);
+  color-scheme: dark;
+}
+.rc-ui *, .rc-ui *::before, .rc-ui *::after { box-sizing: border-box; }
+.rc-ui .rc-panel, .rc-ui .rc-card {
+  background: var(--rc-panel);
+  border: 1px solid var(--rc-line);
+  box-shadow: var(--rc-shadow);
+  -webkit-backdrop-filter: blur(var(--rc-blur));
+  backdrop-filter: blur(var(--rc-blur));
+}
+.rc-ui .rc-panel { border-radius: var(--rc-radius-panel); padding: 20px; }
+.rc-ui .rc-card { border-radius: var(--rc-radius-card); padding: 16px; }
+.rc-ui .rc-stack { display: grid; gap: var(--rc-gap); }
+.rc-ui .rc-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.rc-ui .rc-muted { color: var(--rc-muted); }
+.rc-ui .rc-number { font-variant-numeric: tabular-nums; }
+.rc-ui .rc-button, .rc-ui .rc-input {
+  min-height: 36px;
+  border: 1px solid var(--rc-line);
+  border-radius: var(--rc-radius-control);
+  background: var(--rc-panel);
+  color: var(--rc-text);
+  font: inherit;
+}
+.rc-ui .rc-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 7px 12px; cursor: pointer;
+  transition: background-color var(--rc-fast), border-color var(--rc-fast),
+    box-shadow var(--rc-fast), transform var(--rc-fast) var(--rc-ease-out);
+}
+.rc-ui .rc-button--primary { background: var(--rc-accent); color: var(--rc-on-accent); border-color: var(--rc-accent); }
+.rc-ui .rc-button--danger { color: #ad2438; background: #fff0f2; border-color: #d99ba5; }
+.rc-ui[data-theme="dark"] .rc-button--danger { color: #ffb4bf; background: #391d28; border-color: #8f4b60; }
+.rc-ui .rc-input { padding: 7px 10px; width: 100%; min-width: 0; }
+.rc-ui .rc-field { display: grid; gap: 5px; }
+.rc-ui .rc-label { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; }
+.rc-ui .rc-label input { accent-color: var(--rc-accent); }
+.rc-ui :is(.rc-button,.rc-input,.rc-filter):focus-visible { outline: 2px solid var(--rc-accent); outline-offset: 3px; }
+@media (hover: hover) {
+  .rc-ui .rc-button:not(:disabled):hover { border-color: var(--rc-accent); box-shadow: 0 2px 8px rgba(15,35,55,.12); transform: translateY(-1px); }
+  .rc-ui .rc-button:not(.rc-button--primary):not(.rc-button--danger):not(:disabled):hover { background: var(--rc-accent-soft); }
+}
+.rc-ui .rc-button:not(:disabled):active { transform: scale(.98); box-shadow: none; }
+.rc-ui .rc-button:disabled { opacity: .55; cursor: not-allowed; transform: none; box-shadow: none; }
+.rc-ui .rc-badge { border-radius: 999px; padding: 2px 8px; background: var(--rc-accent-soft); color: var(--rc-accent); font-size: 12px; }
+.rc-ui .rc-filters { position: relative; display: inline-flex; flex-wrap: nowrap; padding: 4px; gap: 4px; max-width: 100%; overflow: auto; border: 1px solid var(--rc-line); border-radius: 13px; background: var(--rc-accent-soft); }
+.rc-ui .rc-filter { position: relative; z-index: 1; flex: 0 0 auto; border: 0; background: transparent; color: var(--rc-muted); border-radius: 9px; padding: 7px 12px; font: inherit; cursor: pointer; }
+.rc-ui .rc-filter[aria-pressed="true"] { color: var(--rc-accent); }
+/* Inset ring stays inside the overflow-scrolling segmented group. */
+.rc-ui .rc-filter:focus-visible { outline-offset: -2px; }
+.rc-ui .rc-selection { position: absolute; left: 0; top: 4px; bottom: 4px; border-radius: 9px; background: var(--rc-solid); box-shadow: 0 1px 4px rgba(20,30,50,.08); pointer-events: none; transition: transform var(--rc-medium) var(--rc-ease-out), width var(--rc-medium) var(--rc-ease-out); }
+.rc-ui .rc-reveal { animation: rc-ui-reveal var(--rc-medium) var(--rc-ease-out); }
+@keyframes rc-ui-reveal { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (pointer: coarse) { .rc-ui :is(.rc-button,.rc-input,.rc-filter,.rc-label) { min-height: 44px; } }
+/* Explicit performance mode: keep the surface readable without blur. */
+.rc-ui[data-performance="low"] :is(.rc-panel,.rc-card) { background: var(--rc-solid); backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .rc-ui :is(.rc-panel,.rc-card) { background: var(--rc-solid); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rc-ui :is(.rc-button,.rc-selection) { transition: none; }
+  .rc-ui .rc-reveal { animation: none; }
+  .rc-ui .rc-button:not(:disabled):hover, .rc-ui .rc-button:not(:disabled):active { transform: none; }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "RC UI 风格"
+  short_description: "复用轻磨砂、分级圆角、克制动效和紧凑工具界面的个人设计风格"
+  default_prompt: "使用 $rc-ui-style 为当前界面应用 RC 风格，保留功能、主题和项目例外，并验证交互状态。"
