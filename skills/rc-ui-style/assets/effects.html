@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RC UI · 效果实验室</title>
+  <link rel="stylesheet" href="rc-ui.css">
+  <link rel="stylesheet" href="rc-effects.css">
+  <style>
+    body.rc-ui { margin: 0; min-height: 100vh; }
+    .lab { container: rc-lab / inline-size; max-width: 1200px; margin: 0 auto; padding: 36px 24px 28px; }
+    .lab[data-compact="true"] { max-width: 438px; }
+    .lab h1, .lab h2, .lab p { margin: 0; }
+    .lab h1 { font-size: clamp(24px, 3vw, 34px); letter-spacing: -.03em; line-height: 1.2; }
+    .lab h2 { font-size: 17px; line-height: 1.4; }
+    .lab a { color: var(--rc-accent); text-underline-offset: 3px; }
+    .lab button, .lab select, .lab input { font: inherit; }
+    .lab code { font-size: 12px; overflow-wrap: anywhere; }
+    .lab-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 20px; margin-bottom: 24px; }
+    .lab-kicker { display: block; color: var(--rc-accent); font-size: 12px; font-weight: 700; letter-spacing: .16em; margin-bottom: 10px; }
+    .lab-intro { max-width: 60ch; margin-top: 12px !important; color: var(--rc-muted); }
+    .lab-settings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 18px; }
+    .lab-settings .rc-field { font-size: 12px; color: var(--rc-muted); }
+    .lab-options { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 20px; border-top: 1px solid var(--rc-line); padding-top: 10px; }
+    .lab-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin: 18px 0; }
+    .lab-tile { min-width: 0; height: 100%; }
+    .lab-tile > .rc-surface { height: 100%; }
+    .lab-number { display: block; font-size: 11px; letter-spacing: .08em; color: var(--rc-muted); font-weight: 600; }
+    .lab-display { font-size: clamp(28px, 4vw, 42px); line-height: 1.1; letter-spacing: -.03em; font-weight: 650; }
+    .lab-copy { color: var(--rc-muted); max-width: 62ch; }
+    .lab-swatch-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .lab-swatch { min-height: 68px; padding: 12px; border: 1px solid var(--rc-line); border-radius: var(--rc-radius-control); background: var(--rc-solid); display: grid; align-content: center; }
+    .lab-swatch strong { font-weight: 600; font-variant-numeric: tabular-nums; }
+    .lab-swatch span { color: var(--rc-muted); font-size: 11px; }
+    .lab-action { align-self: start; justify-self: start; }
+    .lab-slide { display: grid; gap: 12px; align-content: start; }
+    .lab-slide-title { font-size: 25px; font-weight: 600; line-height: 1.3; }
+    .lab-footer { margin-top: 22px; border-top: 1px solid var(--rc-line); padding-top: 18px; display: grid; gap: 10px; }
+    .lab-status { font-size: 12px; color: var(--rc-muted); min-height: 18px; }
+    .lab-live { font-size: 12px; color: var(--rc-accent); min-height: 18px; }
+    .lab-note { border-left: 2px solid var(--rc-accent); padding-left: 12px; }
+    .lab .rc-surface { display: grid; align-content: start; gap: 14px; }
+    .lab .rc-label { min-height: 40px; }
+    .lab [data-rc-slide] { min-height: 134px; }
+    .lab .rc-media img { aspect-ratio: 3 / 2; object-fit: contain; background: #f3f4f7; }
+    .lab noscript { display: block; padding: 12px; margin-bottom: 18px; border: 1px solid var(--rc-line); }
+    @container rc-lab (max-width: 800px) {
+      .lab .rc-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .lab .rc-span-4 { grid-column: 1 / -1; }
+    }
+    @container rc-lab (max-width: 480px) {
+      .lab .rc-bento { grid-template-columns: minmax(0, 1fr); }
+      .lab :is(.rc-span-2, .rc-span-4) { grid-column: auto; }
+      .lab-settings { grid-template-columns: minmax(0, 1fr); }
+      .lab-options { display: grid; gap: 4px; }
+      .lab .rc-nav-island { width: 100%; }
+      .lab .rc-surface { padding: 16px; }
+    }
+    @media (max-width: 480px) {
+      .lab { padding: 24px 14px; }
+      .lab-settings { grid-template-columns: minmax(0, 1fr); }
+      .lab-options { display: grid; gap: 4px; }
+    }
+  </style>
+</head>
+<body class="rc-ui rc-effects" data-theme="light" data-effect-profile="expressive" data-surface="glass" data-performance="normal" data-motion="system" data-atmosphere="off">
+<main class="lab rc-scene" id="lab">
+  <div class="rc-atmosphere" aria-hidden="true"></div>
+  <header class="lab-header">
+    <div>
+      <span class="lab-kicker">RC / EFFECTS LAB</span>
+      <h1>清透材质，有分寸的动态。</h1>
+      <p class="lab-intro">从 Kiseki / Myriad 提炼机制，融入 RC 的紧凑界面语言。这里演示独立重写的轻量效果，按用途选择即可。</p>
+    </div>
+    <button type="button" class="rc-button" data-rc-theme-toggle aria-pressed="false" disabled>深色模式</button>
+  </header>
+  <noscript>JavaScript 未启用：所有内容与轮播条目仍可阅读，增强控件保持禁用。</noscript>
+  <section class="rc-surface lab-settings" aria-label="效果设置">
+    <label class="rc-field">表现强度
+      <select class="rc-input" id="profile" disabled>
+        <option value="restrained">克制 · 高频工具</option>
+        <option value="expressive" selected>增强 · 媒体与仪表盘</option>
+        <option value="showcase">展示 · 首页与作品</option>
+      </select>
+    </label>
+    <label class="rc-field">表面材质
+      <select class="rc-input" id="surface" disabled>
+        <option value="glass">Glass · 轻玻璃</option>
+        <option value="solid">Solid · 实色</option>
+        <option value="outline">Outline · 轮廓</option>
+        <option value="flat">Flat · 平面</option>
+      </select>
+    </label>
+    <label class="rc-field">强调色
+      <select class="rc-input" id="accent" disabled>
+        <option value="blue">冷蓝</option>
+        <option value="rose">玫瑰</option>
+        <option value="teal">青绿</option>
+      </select>
+    </label>
+    <div class="lab-options">
+      <label class="rc-label"><input id="low-power" type="checkbox" disabled>低性能模式</label>
+      <label class="rc-label"><input id="reduce-motion" type="checkbox" disabled>减少动效</label>
+      <label class="rc-label"><input id="ambient" type="checkbox" disabled>氛围慢动（仅展示档）</label>
+      <label class="rc-label"><input id="compact" type="checkbox" disabled>窄容器预览</label>
+    </div>
+  </section>
+  <div class="lab-toolbar">
+    <div class="rc-island rc-nav-island" data-rc-selection role="group" aria-label="效果分类">
+      <span class="rc-selection" aria-hidden="true"></span>
+      <button type="button" class="rc-filter" data-rc-option="all" aria-pressed="true" disabled>全部效果</button>
+      <button type="button" class="rc-filter" data-rc-option="material" aria-pressed="false" disabled>材质</button>
+      <button type="button" class="rc-filter" data-rc-option="interaction" aria-pressed="false" disabled>交互</button>
+      <button type="button" class="rc-filter" data-rc-option="content" aria-pressed="false" disabled>内容</button>
+    </div>
+    <p class="lab-status" id="filter-status" role="status">显示 7 组效果</p>
+  </div>
+  <div class="rc-bento" id="tiles">
+    <div class="lab-tile rc-span-2" data-kind="material" data-rc-reveal>
+      <section class="rc-surface rc-edge">
+        <span class="lab-number">01 / SURFACE</span>
+        <h2>材质、主题与强度，分别选择</h2>
+        <p class="lab-copy">细边缘、内高光、低层级阴影负责层次。切到实色或低性能时，文字与边界仍然清晰。</p>
+        <div class="lab-swatch-row" aria-label="RC 动效参数示例">
+          <div class="lab-swatch"><strong>160 ms</strong><span>局部反馈</span></div>
+          <div class="lab-swatch"><strong>260 ms</strong><span>选中底板</span></div>
+          <div class="lab-swatch"><strong>280 ms</strong><span>增强档揭示</span></div>
+        </div>
+        <p class="lab-status">这些是 RC 示例参数，不是对源站的逐像素复刻。</p>
+      </section>
+    </div>
+    <div class="lab-tile" data-kind="interaction" data-rc-reveal>
+      <section class="rc-surface" data-rc-spotlight data-rc-tilt>
+        <span class="lab-number">02 / POINTER</span>
+        <h2>局部聚光与轻倾斜</h2>
+        <p class="lab-copy">指针经过时响应；触屏、克制档与减少动效时保持静态。</p>
+        <button type="button" class="rc-button lab-action" id="inspect-card" disabled>记录一次点击</button>
+        <p class="lab-live" id="card-status" role="status">尚未点击</p>
+      </section>
+    </div>
+    <div class="lab-tile" data-kind="interaction" data-rc-reveal>
+      <section class="rc-surface rc-lift">
+        <span class="lab-number">03 / FEEDBACK</span>
+        <h2>触点反馈</h2>
+        <p class="lab-copy">水波只说明点击位置；按钮执行结果由下方文字表达。</p>
+        <button type="button" class="rc-button rc-button--primary lab-action" data-rc-ripple id="feedback" disabled>试试按压</button>
+        <p class="lab-live" id="feedback-status" role="status">等待操作</p>
+      </section>
+    </div>
+    <div class="lab-tile rc-span-2" data-kind="content" data-rc-reveal>
+      <section class="rc-surface" data-rc-carousel data-rc-interval="5000" role="region" aria-roledescription="轮播" aria-label="设计要点">
+        <span class="lab-number">04 / ROTATION</span>
+        <div class="rc-carousel-content">
+          <article class="lab-slide" data-rc-slide>
+            <h2 class="lab-slide-title">同一空间，逐步披露。</h2>
+            <p class="lab-copy">手动翻页默认可用，主动播放后才会轮换。键盘进入时停止，后台隐藏时暂停。</p>
+          </article>
+          <article class="lab-slide" data-rc-slide>
+            <h2 class="lab-slide-title">反馈跟随真实状态。</h2>
+            <p class="lab-copy">装饰背景与业务忙碌分开；没有真实任务时，不出现虚假的处理进度。</p>
+          </article>
+          <article class="lab-slide" data-rc-slide>
+            <h2 class="lab-slide-title">先保留内容，再增强。</h2>
+            <p class="lab-copy">无 JavaScript 时显示全部条目。低性能与减少动效模式保留手动翻页和清晰的信息。</p>
+          </article>
+        </div>
+        <div class="rc-carousel-controls">
+          <button type="button" class="rc-button" data-rc-prev disabled>上一页</button>
+          <button type="button" class="rc-button" data-rc-next disabled>下一页</button>
+          <button type="button" class="rc-button" data-rc-toggle disabled>播放轮播</button>
+          <span class="lab-status" data-rc-status></span>
+        </div>
+      </section>
+    </div>
+    <div class="lab-tile rc-span-2" data-kind="interaction" data-rc-reveal>
+      <section class="rc-surface">
+        <span class="lab-number">05 / DISCLOSURE</span>
+        <h2>轻量展开，键盘也可操作</h2>
+        <p class="lab-copy">用原生 disclosure 保留浏览器行为。复杂模态、焦点圈定和窗口管理由目标项目实现。</p>
+        <details class="rc-disclosure">
+          <summary>如何选择效果强度？</summary>
+          <p class="lab-copy">高频编辑工具用克制档；媒体与数据概览可选增强档；展示档只对低密度首页启用。聚光、倾斜和持续氛围逐项选择。</p>
+        </details>
+        <details class="rc-disclosure">
+          <summary>哪些能力只在配方中？</summary>
+          <p class="lab-copy">真液态折射、全屏 WebGL 水波、跨页共享元素、真实音乐与逐字歌词。本示例不模拟它们已经接入。</p>
+        </details>
+      </section>
+    </div>
+    <div class="lab-tile rc-span-2" data-kind="content" data-rc-reveal>
+      <section class="rc-surface">
+        <span class="lab-number">06 / MEDIA</span>
+        <h2>主题改变，媒体原色保持</h2>
+        <figure class="rc-media">
+          <img src="style-confirmation.png" width="1536" height="1024" loading="lazy" alt="仓库已有 RC UI 风格确认图，作为不随主题滤色的媒体示例">
+          <figcaption>使用仓库已有确认图。图中旧文字与缩略图仅为历史示意；示例不会为暗色主题给整个图片增加滤镜。</figcaption>
+        </figure>
+      </section>
+    </div>
+    <div class="lab-tile rc-span-2" data-kind="material" data-rc-reveal>
+      <section class="rc-surface">
+        <span class="lab-number">07 / LAYERS</span>
+        <h2>环境层与内容层各司其职</h2>
+        <p class="lab-display">背景退后，<br>内容清楚。</p>
+        <p class="lab-copy">这里的低饱和环境色是独立装饰层。只有展示档加上氛围开关，才会产生缓慢变化；可随时关掉。</p>
+        <p class="lab-copy lab-note">玻璃不支持、低性能或高对比度模式下保留可读表面。装饰层不拦截鼠标，不承载关键文字。</p>
+        <label class="rc-field">检查输入与焦点
+          <input class="rc-input" placeholder="长文件名、中文与键盘焦点" autocomplete="off">
+        </label>
+      </section>
+    </div>
+  </div>
+  <footer class="lab-footer">
+    <p class="lab-status" id="mode-status" role="status">离线示例；未连接业务服务。</p>
+    <div class="rc-row">
+      <button type="button" class="rc-button" id="runtime-toggle" disabled>卸载增强</button>
+      <button type="button" class="rc-button" id="runtime-reinit" disabled>重新初始化</button>
+      <a href="components.html">基础组件示例</a>
+      <a href="../references/kiseki-effects.md">效果与来源目录</a>
+      <a href="../references/effects-recipes.md">接入配方</a>
+    </div>
+    <p class="lab-status">本页为 RC 改编验证入口，不复制参考站的品牌、图片、字体或原始源码。</p>
+  </footer>
+</main>
+<script src="rc-effects.js"></script>
+<script>
+(() => {
+  if (!window.RCEffects) return;
+  const root = document.body;
+  const lab = document.getElementById('lab');
+  const tiles = [...document.querySelectorAll('#tiles > [data-kind]')];
+  const status = document.getElementById('mode-status');
+  const toggle = document.getElementById('runtime-toggle');
+  const profile = document.getElementById('profile');
+  const surface = document.getElementById('surface');
+  const accent = document.getElementById('accent');
+  const ambient = document.getElementById('ambient');
+  let api;
+  let feedbackCount = 0;
+  let cardCount = 0;
+  for (const control of document.querySelectorAll('button[disabled], select[disabled], input[disabled]')) control.disabled = false;
+  api = window.RCEffects.init(root);
+  const accents = {
+    blue: { light: ['#1765ca', 'rgba(23,101,202,.1)', '#fff'], dark: ['#77d2ff', 'rgba(119,210,255,.12)', '#0b1018'] },
+    rose: { light: ['#a22c61', 'rgba(162,44,97,.1)', '#fff'], dark: ['#f6a8ce', 'rgba(246,168,206,.12)', '#24121c'] },
+    teal: { light: ['#0d706a', 'rgba(13,112,106,.1)', '#fff'], dark: ['#7cddd0', 'rgba(124,221,208,.12)', '#0a2220'] }
+  };
+  function applyAccent() {
+    const values = accents[accent.value][root.dataset.theme];
+    ['--rc-accent', '--rc-accent-soft', '--rc-on-accent'].forEach((name, index) => root.style.setProperty(name, values[index]));
+  }
+  function updateStatus() {
+    const reduced = root.dataset.motion === 'reduced' || matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const style = getComputedStyle(lab);
+    const width = Math.round(lab.getBoundingClientRect().width - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight));
+    status.textContent = `${api ? '增强已加载' : '增强已卸载'} · ${root.dataset.theme === 'dark' ? '深色' : '浅色'} · ${profile.selectedOptions[0].text} · ${reduced ? '减少动效' : '跟随系统动效'} · 内容容器约 ${width} px`;
+  }
+  profile.addEventListener('change', () => { root.dataset.effectProfile = profile.value; updateStatus(); });
+  surface.addEventListener('change', () => { root.dataset.surface = surface.value; });
+  accent.addEventListener('change', applyAccent);
+  document.getElementById('low-power').addEventListener('change', event => {
+    root.dataset.performance = event.target.checked ? 'low' : 'normal';
+    updateStatus();
+  });
+  document.getElementById('reduce-motion').addEventListener('change', event => {
+    root.dataset.motion = event.target.checked ? 'reduced' : 'system';
+    updateStatus();
+  });
+  ambient.addEventListener('change', () => { root.dataset.atmosphere = ambient.checked ? 'on' : 'off'; });
+  document.getElementById('compact').addEventListener('change', event => {
+    lab.dataset.compact = String(event.target.checked);
+    updateStatus();
+  });
+  function applyFilter(value) {
+    let count = 0;
+    for (const tile of tiles) {
+      tile.hidden = value !== 'all' && tile.dataset.kind !== value;
+      if (!tile.hidden) count++;
+    }
+    document.getElementById('filter-status').textContent = `显示 ${count} 组效果`;
+  }
+  function applyCurrentFilter() {
+    const selected = root.querySelector('[data-rc-option][aria-pressed="true"]');
+    applyFilter(selected?.dataset.rcOption || 'all');
+  }
+  root.addEventListener('rc:select', event => applyFilter(event.detail.value));
+  document.getElementById('feedback').addEventListener('click', () => {
+    document.getElementById('feedback-status').textContent = `已响应 ${++feedbackCount} 次点击`;
+  });
+  document.getElementById('inspect-card').addEventListener('click', () => {
+    document.getElementById('card-status').textContent = `已记录 ${++cardCount} 次点击`;
+  });
+  const runtimeControls = [...root.querySelectorAll('[data-rc-option], [data-rc-prev], [data-rc-next], [data-rc-toggle], [data-rc-theme-toggle]')];
+  toggle.addEventListener('click', () => {
+    if (api) {
+      api.destroy();
+      api = null;
+      for (const tile of tiles) tile.hidden = false;
+      document.getElementById('filter-status').textContent = `显示 ${tiles.length} 组效果`;
+      for (const control of runtimeControls) control.disabled = true;
+      root.dataset.atmosphere = 'off';
+      ambient.checked = false;
+      toggle.textContent = '加载增强';
+    } else {
+      for (const control of runtimeControls) control.disabled = false;
+      api = window.RCEffects.init(root);
+      applyCurrentFilter();
+      toggle.textContent = '卸载增强';
+    }
+    updateStatus();
+  });
+  document.getElementById('runtime-reinit').addEventListener('click', () => {
+    for (const control of runtimeControls) control.disabled = false;
+    api = window.RCEffects.init(root);
+    applyCurrentFilter();
+    toggle.textContent = '卸载增强';
+    updateStatus();
+  });
+  const observer = new MutationObserver(() => { applyAccent(); updateStatus(); });
+  observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  motion.addEventListener('change', updateStatus);
+  window.addEventListener('resize', updateStatus);
+  applyAccent();
+  updateStatus();
+})();
+</script>
+</body>
+</html>

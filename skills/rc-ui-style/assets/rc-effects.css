@@ -1,0 +1,250 @@
+/* Optional RC effects. Load after rc-ui.css; nothing outside .rc-effects changes. */
+.rc-ui.rc-effects {
+  --rc-fx-glass: rgba(255, 255, 255, .84);
+  --rc-fx-highlight: rgba(255, 255, 255, .8);
+  --rc-fx-glow: rgba(60, 117, 201, .13);
+  --rc-fx-secondary: rgba(161, 115, 191, .11);
+  --rc-fx-spotlight: rgba(93, 151, 229, .14);
+  --rc-fx-edge: rgba(90, 133, 196, .34);
+  --rc-fx-blur: 14px;
+  --rc-fx-reveal: 280ms;
+  --rc-fx-radius-island: 18px;
+  --rc-fx-lift: -2px;
+  --rc-fx-ambient-opacity: .6;
+}
+.rc-ui.rc-effects[data-theme="dark"] {
+  --rc-fx-glass: rgba(21, 31, 47, .9);
+  --rc-fx-highlight: rgba(230, 244, 255, .1);
+  --rc-fx-glow: rgba(59, 140, 186, .14);
+  --rc-fx-secondary: rgba(142, 102, 181, .12);
+  --rc-fx-spotlight: rgba(119, 210, 255, .1);
+  --rc-fx-edge: rgba(119, 210, 255, .34);
+}
+.rc-ui.rc-effects[data-effect-profile="restrained"] {
+  --rc-fx-lift: 0px;
+  --rc-fx-reveal: 180ms;
+  --rc-fx-ambient-opacity: .24;
+}
+.rc-ui.rc-effects[data-effect-profile="showcase"] {
+  --rc-fx-reveal: 360ms;
+  --rc-fx-ambient-opacity: .8;
+}
+.rc-ui.rc-effects [hidden] { display: none !important; }
+
+/* Ambient color belongs to an isolated decoration layer, never to media. */
+.rc-effects.rc-scene,
+.rc-effects .rc-scene { position: relative; isolation: isolate; }
+.rc-effects .rc-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--rc-fx-ambient-opacity);
+}
+.rc-effects .rc-atmosphere::before,
+.rc-effects .rc-atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  background: radial-gradient(ellipse at 15% 15%, var(--rc-fx-glow), transparent 62%);
+}
+.rc-effects .rc-atmosphere::after {
+  background: radial-gradient(ellipse at 88% 60%, var(--rc-fx-secondary), transparent 58%);
+}
+.rc-effects[data-effect-profile="showcase"][data-atmosphere="on"] .rc-atmosphere::before {
+  animation: rc-ambient-drift 18s ease-in-out infinite alternate;
+}
+.rc-effects[data-effect-profile="showcase"][data-atmosphere="on"] .rc-atmosphere::after {
+  animation: rc-ambient-drift 23s ease-in-out infinite alternate-reverse;
+}
+@keyframes rc-ambient-drift { to { transform: translate3d(2%, 2%, 0) scale(1.03); } }
+
+/* Theme, material and effect intensity are independent choices. */
+.rc-effects .rc-surface,
+.rc-effects .rc-island {
+  position: relative;
+  background: var(--rc-fx-glass);
+  border: 1px solid var(--rc-line);
+  border-radius: var(--rc-radius-card);
+  box-shadow: inset 0 1px 0 var(--rc-fx-highlight), var(--rc-shadow);
+  -webkit-backdrop-filter: blur(var(--rc-fx-blur));
+  backdrop-filter: blur(var(--rc-fx-blur));
+}
+.rc-effects .rc-surface { padding: 20px; }
+.rc-effects .rc-island { padding: 6px; border-radius: var(--rc-fx-radius-island); }
+.rc-effects[data-surface="solid"] :is(.rc-surface, .rc-island):not([data-surface]),
+.rc-effects .rc-surface[data-surface="solid"] {
+  background: var(--rc-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.rc-effects[data-surface="outline"] :is(.rc-surface, .rc-island):not([data-surface]),
+.rc-effects .rc-surface[data-surface="outline"] {
+  background: var(--rc-bg);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+.rc-effects[data-surface="flat"] :is(.rc-surface, .rc-island):not([data-surface]),
+.rc-effects .rc-surface[data-surface="flat"] {
+  background: var(--rc-solid);
+  border-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+.rc-effects .rc-edge {
+  border-color: var(--rc-fx-edge);
+  box-shadow: inset 0 1px 0 var(--rc-fx-highlight), 0 0 0 1px var(--rc-fx-secondary), var(--rc-shadow);
+}
+
+/* Keep content above the decorative spotlight without clipping focus rings. */
+.rc-effects [data-rc-spotlight] { isolation: isolate; }
+.rc-effects [data-rc-spotlight]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(260px circle at var(--rc-pointer-x, 50%) var(--rc-pointer-y, 50%), var(--rc-fx-spotlight), transparent 75%);
+  transition: opacity var(--rc-fast);
+}
+.rc-effects [data-rc-spotlight][data-rc-pointer-active="true"]::before { opacity: 1; }
+.rc-effects [data-rc-spotlight]:focus-within { border-color: var(--rc-accent); }
+.rc-effects [data-rc-tilt] {
+  transform: perspective(900px) rotateX(var(--rc-tilt-x, 0deg)) rotateY(var(--rc-tilt-y, 0deg));
+  transition: transform var(--rc-fast) var(--rc-ease-out);
+}
+.rc-effects .rc-lift { transition: transform var(--rc-fast) var(--rc-ease-out), border-color var(--rc-fast); }
+@media (hover: hover) and (pointer: fine) {
+  .rc-effects .rc-lift:hover { transform: translateY(var(--rc-fx-lift)); border-color: var(--rc-fx-edge); }
+}
+/* Use rc-lift or data-rc-tilt on a given transform owner, never both. */
+.rc-effects [data-rc-ripple] { position: relative; overflow: hidden; isolation: isolate; }
+.rc-effects .rc-ripple-wave {
+  position: absolute;
+  z-index: -1;
+  left: var(--rc-ripple-x);
+  top: var(--rc-ripple-y);
+  width: var(--rc-ripple-size);
+  height: var(--rc-ripple-size);
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  animation: rc-ripple 420ms var(--rc-ease-out) forwards;
+}
+@keyframes rc-ripple {
+  from { opacity: .16; transform: translate(-50%, -50%) scale(0); }
+  to { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Content is visible before enhancement and if JavaScript is unavailable. */
+.rc-effects [data-rc-reveal] { opacity: 1; }
+.rc-effects [data-rc-reveal][data-reveal-ready]:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.rc-effects [data-rc-reveal][data-reveal-ready].is-revealed {
+  animation: rc-effects-reveal var(--rc-fx-reveal) var(--rc-ease-out) both;
+  animation-delay: var(--rc-reveal-delay, 0ms);
+}
+@keyframes rc-effects-reveal {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.rc-effects .rc-bento {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+.rc-effects .rc-bento > * { min-width: 0; }
+.rc-effects .rc-span-2 { grid-column: span 2; }
+.rc-effects .rc-span-4 { grid-column: span 4; }
+.rc-effects .rc-nav-island {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+}
+.rc-effects .rc-nav-island[data-orientation="vertical"] { flex-direction: column; align-items: stretch; }
+.rc-effects [data-rc-selection] { position: relative; }
+.rc-effects [data-rc-option] { position: relative; z-index: 1; flex: 0 0 auto; }
+.rc-effects [data-rc-option][aria-pressed="true"] { color: var(--rc-accent); }
+.rc-effects [data-rc-selection] .rc-selection { transition: transform var(--rc-medium) var(--rc-ease-out), width var(--rc-medium) var(--rc-ease-out), height var(--rc-medium) var(--rc-ease-out); }
+.rc-effects .rc-nav-island [data-rc-option] { min-height: 40px; }
+.rc-effects :is(.rc-nav-island, .rc-filters) [data-rc-option]:focus-visible { outline-offset: -3px; }
+
+.rc-effects .rc-carousel-content { min-height: 132px; }
+.rc-effects [data-rc-slide] + [data-rc-slide] { margin-top: 12px; }
+.rc-effects [data-rc-carousel] [data-rc-slide][hidden] + [data-rc-slide] { margin-top: 0; }
+.rc-effects .rc-carousel-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rc-effects [data-rc-status] { font-variant-numeric: tabular-nums; }
+.rc-effects .rc-disclosure { border-top: 1px solid var(--rc-line); padding-top: 12px; }
+.rc-effects .rc-disclosure summary { cursor: pointer; min-height: 40px; padding: 8px 4px; font-weight: 600; }
+.rc-effects .rc-disclosure[open] > :not(summary) { animation: rc-effects-reveal var(--rc-medium) var(--rc-ease-out); }
+.rc-effects .rc-disclosure summary:focus-visible { outline: 2px solid var(--rc-accent); outline-offset: 2px; border-radius: var(--rc-radius-control); }
+.rc-effects .rc-media { margin: 0; min-width: 0; }
+.rc-effects .rc-media img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.rc-effects .rc-media figcaption { margin-top: 10px; color: var(--rc-muted); }
+
+@media (max-width: 800px) {
+  .rc-effects .rc-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rc-effects .rc-span-4 { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+  .rc-effects .rc-bento { grid-template-columns: minmax(0, 1fr); }
+  .rc-effects :is(.rc-span-2, .rc-span-4) { grid-column: auto; }
+  .rc-effects .rc-surface { padding: 16px; }
+  .rc-effects .rc-nav-island { width: 100%; }
+}
+@media (pointer: coarse) {
+  .rc-effects :is([data-rc-option], .rc-disclosure summary, [data-rc-prev], [data-rc-next], [data-rc-toggle]) { min-height: 44px; }
+  .rc-effects [data-rc-tilt] { transform: none; }
+  .rc-effects [data-rc-spotlight]::before { display: none; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .rc-effects :is(.rc-surface, .rc-island) { background: var(--rc-solid); }
+}
+.rc-effects[data-performance="low"] :is(.rc-surface, .rc-island) {
+  background: var(--rc-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+.rc-effects[data-performance="low"] .rc-atmosphere,
+.rc-effects[data-performance="low"] [data-rc-spotlight]::before { display: none; }
+.rc-effects[data-effect-profile="restrained"] [data-rc-spotlight]::before { display: none; }
+.rc-effects:is([data-performance="low"], [data-effect-profile="restrained"]) [data-rc-tilt] { transform: none; }
+.rc-effects[data-rc-suspended="true"] *,
+.rc-effects[data-rc-suspended="true"] *::before,
+.rc-effects[data-rc-suspended="true"] *::after { animation-play-state: paused !important; }
+.rc-effects[data-motion="reduced"] *,
+.rc-effects[data-motion="reduced"] *::before,
+.rc-effects[data-motion="reduced"] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+.rc-effects[data-motion="reduced"] :is([data-rc-tilt], .rc-lift, [data-rc-reveal], .rc-button) { transform: none !important; }
+.rc-effects[data-motion="reduced"] [data-rc-reveal] { opacity: 1 !important; }
+.rc-effects[data-motion="reduced"] .rc-ripple-wave,
+.rc-effects[data-motion="reduced"] [data-rc-spotlight]::before { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .rc-effects *, .rc-effects *::before, .rc-effects *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .rc-effects :is([data-rc-tilt], .rc-lift, [data-rc-reveal], .rc-button) { transform: none !important; }
+  .rc-effects [data-rc-reveal] { opacity: 1 !important; }
+  .rc-effects .rc-ripple-wave,
+  .rc-effects [data-rc-spotlight]::before { display: none; }
+}
+@media (forced-colors: active) {
+  .rc-effects :is(.rc-surface, .rc-island, .rc-edge) { background: Canvas; border: 1px solid CanvasText; box-shadow: none; backdrop-filter: none; }
+  .rc-effects .rc-atmosphere,
+  .rc-effects .rc-ripple-wave,
+  .rc-effects [data-rc-spotlight]::before { display: none; }
+  .rc-effects [data-rc-option][aria-pressed="true"] { outline: 2px solid Highlight; outline-offset: -3px; }
+}
