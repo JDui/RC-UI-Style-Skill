@@ -1,12 +1,14 @@
-# RC UI Style Skill
+# RC UI Style Skill 2.0
 
 RedialC 的个人 UI 风格技能包：轻磨砂、分级圆角矩形、细描边、紧凑对齐，并融合 [Kiseki](https://kiseki.blog/) 的氛围、导航、卡片与内容动效模式。
 
-这是可复制到不同 Agent 工作流的 **文件型 skill**，不是某个前端框架，也不是自动安装脚本。2026-10-29，用户确认下图的整体方向；具体 token 是提炼后的起点，不代表六个参考项目都使用相同数值。
+这是可复制到不同 Agent 工作流的文件型 Skill。2.0 保留现有视觉体系，增加文案简洁性与动效连续性要求。历史确认图保留在 [style-confirmation.png](skills/rc-ui-style/assets/style-confirmation.png)；其文字和数值不作为精确规格。
 
-![已确认的风格方向](skills/rc-ui-style/assets/style-confirmation.png)
+## 2.0 参考图
 
-图中仍保留生成时的“待你确认”字样，但整体方向已于 **2026-10-29** 获用户确认。图中深色预览的缩略图仅是示意，不意味着可以随主题压暗实际媒体。实现以本包正文规则为准，正文优先于生成图中的视觉伪影；无需为这两个差异重绘确认图。
+![RC UI Style Lab 2.0 布局与材质参考](skills/rc-ui-style/assets/style-reference-v2.webp)
+
+图像为压缩构图预览。参考布局、玻璃分层、导航与卡片组合；不以图片中的文字、数据或动画表述作为产品要求。实际界面文案遵循 [2.0 文案规范](skills/rc-ui-style/references/content-style.md)，动画遵循 [2.0 连续性规范](skills/rc-ui-style/references/motion-v2.md)。
 
 ## 使用
 
@@ -35,7 +37,9 @@ RedialC 的个人 UI 风格技能包：轻磨砂、分级圆角矩形、细描�
 - `SKILL.md`：工作入口、风格原则与引用路由。
 - `references/visual-system.md`：配色、材质、圆角、密度与排版。
 - `references/components.md`：按钮、导航、输入、卡片、状态与布局细节。
-- `references/motion.md`：动效层级、轻弹性、状态与性能约束。
+- `references/motion.md`：基础动效节奏与项目例外。
+- `references/motion-v2.md`：2.0 场景连续性、中断、状态与性能验收。
+- `references/content-style.md`：2.0 UI 文案写法、禁止项及验收。
 - `references/acceptance.md`：视觉、交互、响应式及可访问性验收，含独立子线程分模块评分、证据覆盖率、阻断规则和复验模板。
 - `references/source-map.md`：六个原有参考项目的固定版本证据，以及 Kiseki 的来源边界与例外。
 - `references/kiseki-effects.md`：Kiseki 效果目录、证据等级、适用场景与融合矩阵。
@@ -44,7 +48,8 @@ RedialC 的个人 UI 风格技能包：轻磨砂、分级圆角矩形、细描�
 - `assets/components.html`：无需依赖的组件状态示例，直接用浏览器打开。
 - `assets/rc-effects.css`、`assets/rc-effects.js`：显式启用的增强效果；接入方式见实现配方。
 - `assets/effects.html`：增强效果交互示例，配合基础资产直接使用。
-- `assets/style-confirmation.png`：整体风格确认图；不用于逐像素或字号测量。
+- `assets/style-confirmation.png`：历史风格确认图。
+- `assets/style-reference-v2.webp`：2.0 构图参考压缩预览；不作为文案或像素级验收依据。
 
 ## 边界
 

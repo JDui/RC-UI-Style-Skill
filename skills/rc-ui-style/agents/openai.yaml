@@ -1,4 +1,4 @@
 interface:
   display_name: "RC UI 风格"
   short_description: "按用途融合轻磨砂、紧凑布局与 Kiseki 氛围、导航和内容动效"
-  default_prompt: "使用 $rc-ui-style 为当前界面应用 RC 风格，先选用途、效果强度、材质与降级，保留功能、主题和媒体原色，再实现并验证交互状态。"
+  default_prompt: "使用 $rc-ui-style 2.0 设计或修正当前界面。保留业务、主题和媒体原色；采用简洁功能性文案，禁止修饰性语言；按 motion-v2.md 实现可中断的连续动效并验证降级。"

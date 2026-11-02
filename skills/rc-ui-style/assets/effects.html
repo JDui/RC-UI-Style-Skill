@@ -42,7 +42,7 @@
     .lab .rc-surface { display: grid; align-content: start; gap: 14px; }
     .lab .rc-label { min-height: 40px; }
     .lab [data-rc-slide] { min-height: 134px; }
-    .lab .rc-media img { aspect-ratio: 3 / 2; object-fit: contain; background: #f3f4f7; }
+    .lab .rc-media img { aspect-ratio: 16 / 9; object-fit: contain; background: #f3f4f7; }
     .lab noscript { display: block; padding: 12px; margin-bottom: 18px; border: 1px solid var(--rc-line); }
     @container rc-lab (max-width: 800px) {
       .lab .rc-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -69,8 +69,8 @@
   <header class="lab-header">
     <div>
       <span class="lab-kicker">RC / EFFECTS LAB</span>
-      <h1>清透材质，有分寸的动态。</h1>
-      <p class="lab-intro">从 Kiseki / Myriad 提炼机制，融入 RC 的紧凑界面语言。这里演示独立重写的轻量效果，按用途选择即可。</p>
+      <h1>RC UI 组件与动效</h1>
+      <p class="lab-intro">材质、状态与动效测试。支持主题、强度和性能模式切换。</p>
     </div>
     <button type="button" class="rc-button" data-rc-theme-toggle aria-pressed="false" disabled>深色模式</button>
   </header>
@@ -119,21 +119,21 @@
     <div class="lab-tile rc-span-2" data-kind="material" data-rc-reveal>
       <section class="rc-surface rc-edge">
         <span class="lab-number">01 / SURFACE</span>
-        <h2>材质、主题与强度，分别选择</h2>
-        <p class="lab-copy">细边缘、内高光、低层级阴影负责层次。切到实色或低性能时，文字与边界仍然清晰。</p>
+        <h2>材质设置</h2>
+        <p class="lab-copy">切换玻璃、实色、描边和平面材质。布局与内容保持不变。</p>
         <div class="lab-swatch-row" aria-label="RC 动效参数示例">
           <div class="lab-swatch"><strong>160 ms</strong><span>局部反馈</span></div>
           <div class="lab-swatch"><strong>260 ms</strong><span>选中底板</span></div>
           <div class="lab-swatch"><strong>280 ms</strong><span>增强档揭示</span></div>
         </div>
-        <p class="lab-status">这些是 RC 示例参数，不是对源站的逐像素复刻。</p>
+        <p class="lab-status">RC 示例参数，非源站实测值。</p>
       </section>
     </div>
     <div class="lab-tile" data-kind="interaction" data-rc-reveal>
       <section class="rc-surface" data-rc-spotlight data-rc-tilt>
         <span class="lab-number">02 / POINTER</span>
-        <h2>局部聚光与轻倾斜</h2>
-        <p class="lab-copy">指针经过时响应；触屏、克制档与减少动效时保持静态。</p>
+        <h2>聚光与倾斜</h2>
+        <p class="lab-copy">精细指针启用；触屏、克制档和减少动效时禁用。</p>
         <button type="button" class="rc-button lab-action" id="inspect-card" disabled>记录一次点击</button>
         <p class="lab-live" id="card-status" role="status">尚未点击</p>
       </section>
@@ -142,8 +142,8 @@
       <section class="rc-surface rc-lift">
         <span class="lab-number">03 / FEEDBACK</span>
         <h2>触点反馈</h2>
-        <p class="lab-copy">水波只说明点击位置；按钮执行结果由下方文字表达。</p>
-        <button type="button" class="rc-button rc-button--primary lab-action" data-rc-ripple id="feedback" disabled>试试按压</button>
+        <p class="lab-copy">点击显示波纹；次数显示在状态区。</p>
+        <button type="button" class="rc-button rc-button--primary lab-action" data-rc-ripple id="feedback" disabled>测试点击</button>
         <p class="lab-live" id="feedback-status" role="status">等待操作</p>
       </section>
     </div>
@@ -152,15 +152,15 @@
         <span class="lab-number">04 / ROTATION</span>
         <div class="rc-carousel-content">
           <article class="lab-slide" data-rc-slide>
-            <h2 class="lab-slide-title">同一空间，逐步披露。</h2>
+            <h2 class="lab-slide-title">轮播控制</h2>
             <p class="lab-copy">手动翻页默认可用，主动播放后才会轮换。键盘进入时停止，后台隐藏时暂停。</p>
           </article>
           <article class="lab-slide" data-rc-slide>
-            <h2 class="lab-slide-title">反馈跟随真实状态。</h2>
+            <h2 class="lab-slide-title">状态反馈</h2>
             <p class="lab-copy">装饰背景与业务忙碌分开；没有真实任务时，不出现虚假的处理进度。</p>
           </article>
           <article class="lab-slide" data-rc-slide>
-            <h2 class="lab-slide-title">先保留内容，再增强。</h2>
+            <h2 class="lab-slide-title">无障碍与回退</h2>
             <p class="lab-copy">无 JavaScript 时显示全部条目。低性能与减少动效模式保留手动翻页和清晰的信息。</p>
           </article>
         </div>
@@ -175,8 +175,8 @@
     <div class="lab-tile rc-span-2" data-kind="interaction" data-rc-reveal>
       <section class="rc-surface">
         <span class="lab-number">05 / DISCLOSURE</span>
-        <h2>轻量展开，键盘也可操作</h2>
-        <p class="lab-copy">用原生 disclosure 保留浏览器行为。复杂模态、焦点圈定和窗口管理由目标项目实现。</p>
+        <h2>展开面板</h2>
+        <p class="lab-copy">使用原生展开组件。模态与窗口行为由目标项目接入。</p>
         <details class="rc-disclosure">
           <summary>如何选择效果强度？</summary>
           <p class="lab-copy">高频编辑工具用克制档；媒体与数据概览可选增强档；展示档只对低密度首页启用。聚光、倾斜和持续氛围逐项选择。</p>
@@ -190,20 +190,20 @@
     <div class="lab-tile rc-span-2" data-kind="content" data-rc-reveal>
       <section class="rc-surface">
         <span class="lab-number">06 / MEDIA</span>
-        <h2>主题改变，媒体原色保持</h2>
+        <h2>媒体原色</h2>
         <figure class="rc-media">
-          <img src="style-confirmation.png" width="1536" height="1024" loading="lazy" alt="仓库已有 RC UI 风格确认图，作为不随主题滤色的媒体示例">
-          <figcaption>使用仓库已有确认图。图中旧文字与缩略图仅为历史示意；示例不会为暗色主题给整个图片增加滤镜。</figcaption>
+          <img src="style-reference-v2.webp" width="384" height="216" loading="lazy" alt="RC UI 2.0 五类界面布局参考图">
+          <figcaption>构图参考图。图中文字与模拟数据不作为 UI 文案；主题切换不修改图片颜色。</figcaption>
         </figure>
       </section>
     </div>
     <div class="lab-tile rc-span-2" data-kind="material" data-rc-reveal>
       <section class="rc-surface">
         <span class="lab-number">07 / LAYERS</span>
-        <h2>环境层与内容层各司其职</h2>
-        <p class="lab-display">背景退后，<br>内容清楚。</p>
-        <p class="lab-copy">这里的低饱和环境色是独立装饰层。只有展示档加上氛围开关，才会产生缓慢变化；可随时关掉。</p>
-        <p class="lab-copy lab-note">玻璃不支持、低性能或高对比度模式下保留可读表面。装饰层不拦截鼠标，不承载关键文字。</p>
+        <h2>背景层</h2>
+        <p class="lab-display">背景 / 内容</p>
+        <p class="lab-copy">环境色与内容分层。展示档可启用背景运动。</p>
+        <p class="lab-copy lab-note">低性能或高对比度模式改用实色；装饰层不拦截操作。</p>
         <label class="rc-field">检查输入与焦点
           <input class="rc-input" placeholder="长文件名、中文与键盘焦点" autocomplete="off">
         </label>
@@ -219,7 +219,7 @@
       <a href="../references/kiseki-effects.md">效果与来源目录</a>
       <a href="../references/effects-recipes.md">接入配方</a>
     </div>
-    <p class="lab-status">本页为 RC 改编验证入口，不复制参考站的品牌、图片、字体或原始源码。</p>
+    <p class="lab-status">本地示例，不包含第三方源码或业务数据。</p>
   </footer>
 </main>
 <script src="rc-effects.js"></script>
